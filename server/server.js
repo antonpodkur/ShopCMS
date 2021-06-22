@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const errorHandler = require('./helpers/errorHandler');
 require('dotenv').config();
 
 const PORT = process.env.PORT || 3000;
@@ -10,11 +11,14 @@ const app = express();
 
 app.use(express.json());
 app.use(cors());
-app.use(express.json())
 
 if(process.env.NODE_ENV==='production') {
     app.use(express.static('../client/build'))
 }
+
+app.use('/users', require('./controllers/user.controller'));
+
+app.use(errorHandler);
 
 mongoose.connect(process.env.DB_CONNECTION,
     {
