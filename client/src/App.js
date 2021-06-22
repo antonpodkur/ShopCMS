@@ -1,23 +1,27 @@
-import logo from './logo.svg';
 import './App.css';
+import {useState} from 'react';
 
 function App() {
+
+  const [image, setImage] = useState();
+
+  async function handleChange(files)
+  {
+    setImage(files[0]);
+    let formData = new FormData();
+    formData.append('image', files[0]);
+    try {
+      const post = await axios.post('http://localhost:3000', formData);
+      console.log(post);
+    } catch(e) {
+      cosole.error(e.message);
+    }
+    console.log(image);
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <input type="file" onChange={e => handleChange(e.target.files)}/>
     </div>
   );
 }
