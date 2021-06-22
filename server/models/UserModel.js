@@ -10,6 +10,13 @@ const UserSchema = new mongoose.Schema(
         password: {
             type: String,
             required: true,
+        },
+        isActivated: {
+            type: Boolean,
+            default: false
+        },
+        activationLink: {
+            type: String
         }
     },
     {
@@ -17,4 +24,4 @@ const UserSchema = new mongoose.Schema(
     }
 );
 
-module.exports = mongoose.model('UserSchema', UserSchema);
+module.exports = mongoose.model('User', UserSchema);

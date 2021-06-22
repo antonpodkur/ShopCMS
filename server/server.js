@@ -1,24 +1,21 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const errorHandler = require('./helpers/errorHandler');
+const cookieParser = require('cookie-parser');
 require('dotenv').config();
 
-const PORT = process.env.PORT || 3000;
+const router = require('./router')
+
+const PORT = process.env.PORT || 5000;
 
 const app = express();
 
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(cors());
 
-if(process.env.NODE_ENV==='production') {
-    app.use(express.static('../client/build'))
-}
-
-app.use('/users', require('./controllers/user.controller'));
-
-app.use(errorHandler);
+app.use('/api', router);
 
 mongoose.connect(process.env.DB_CONNECTION,
     {
