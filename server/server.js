@@ -2,19 +2,24 @@ const express = require('express');
 const mongoose = require('mongoose');
 const productPoutes = require('./api/routes/productRoutes');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
+const errorMiddleware = require('./middlewares/ErrorMiddleware');
 require('dotenv').config();
 
-const PORT = process.env.PORT || 3000;
+const router = require('./router')
+
+const PORT = process.env.PORT || 5000;
 
 const app = express();
 
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(cors());
 
-if(process.env.NODE_ENV==='production') {
-    app.use(express.static('../client/build'))
-}
+app.use('/api', router);
+
+app.use(errorMiddleware);
 
 mongoose.connect(process.env.DB_CONNECTION,
     {
