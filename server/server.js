@@ -6,7 +6,7 @@ const cookieParser = require('cookie-parser');
 const errorMiddleware = require('./middlewares/ErrorMiddleware');
 require('dotenv').config();
 
-const router = require('./router')
+const userRouter = require('./userRouter/useruserRouter')
 
 const PORT = process.env.PORT || 5000;
 
@@ -17,7 +17,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
 
-app.use('/api', router);
+app.use('/api/users', userRouter);
 
 app.use(errorMiddleware);
 
