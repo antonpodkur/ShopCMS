@@ -1,12 +1,12 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const productPoutes = require('./api/routes/productRoutes');
+const productPoutes = require('./router/productRoutes');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const errorMiddleware = require('./middlewares/ErrorMiddleware');
 require('dotenv').config();
 
-const userRouter = require('./userRouter/useruserRouter')
+const userRouter = require('./router/userRouter');
 
 const PORT = process.env.PORT || 5000;
 
