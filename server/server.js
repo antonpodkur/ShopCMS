@@ -1,21 +1,26 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const productPoutes = require('./api/routes/productRoutes');
+const productPoutes = require('./router/productRoutes');
 const cors = require('cors');
+const cookieParser = require('cookie-parser');
+const errorMiddleware = require('./middlewares/ErrorMiddleware');
 require('dotenv').config();
 
-const PORT = process.env.PORT || 3000;
+const userRouter = require('./router/userRouter');
+
+const PORT = process.env.PORT || 5000;
 
 const app = express();
 
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(cors());
 app.use('/uploads',express.static('uploads'));
 
-if(process.env.NODE_ENV==='production') {
-    app.use(express.static('../client/build'))
-}
+app.use('/api/users', userRouter);
+
+app.use(errorMiddleware);
 
 mongoose.connect(process.env.DB_CONNECTION,
     {
