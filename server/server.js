@@ -11,6 +11,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cors());
+app.use('/uploads',express.static('uploads'));
 
 if(process.env.NODE_ENV==='production') {
     app.use(express.static('../client/build'))
@@ -30,5 +31,3 @@ app.use('/', productPoutes);
 app.listen(PORT, ()=> {
     console.log(`App is up and running on port ${PORT}`);
 });
-
-

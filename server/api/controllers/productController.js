@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const fs = require("fs");
 const Product = require('../models/productModel');
 const { ObjectID } = require('mongodb');
 
@@ -46,14 +47,13 @@ exports.get = async function(req, res) {
 
 exports.createProduct = async function(req, res) {
   let product = new Product(req.body);
-  
-  try {
-    product.img = req.file.path;
-  } catch (err) {
-    console.log(err);
-    product.img = "none";
-  }
 
+  if (req.file == undefined) {
+    product.img = null;
+  } else {
+    product.img = req.file.path;
+  }
+  
   try {
     const response = await product.save();
     res.status(200).json({
@@ -80,7 +80,7 @@ exports.updateProduct = async function(req, res) {
   }
 
   try {
-    const response = await Product.findOneAndUpdate({_id: req.params.id}, req.body);
+    const response = await Product.findOneAndUpdate({_id: req.params.id}, {name: req.body.name, price: req.body.price, description: req.body.description, img: req.file == undefined ? null : req.file.path}, {new: true});
     res.status(200).json({
       status: 200,
       message: "Product updated.",
@@ -106,9 +106,15 @@ exports.deleteProduct = async function(req, res) {
   
 
   try {
-    
-    console.log(req.params.id);
-    const response = await Product.deleteOne({_id: req.params.id});
+    const response = await Product.findOneAndDelete({_id: req.params.id});
+
+    fs.unlink('./' + response.img, (err) => {
+      if (err) {
+        console.log(err);
+      } else {
+        console.log('File Deleted');
+      }
+    });
 
     res.status(200).json({
       status: 200,
@@ -122,6 +128,3 @@ exports.deleteProduct = async function(req, res) {
     });
   }
 };
-
-
-
